@@ -1,0 +1,217 @@
+8.Write a Python program to combine two dictionary adding values for common keys.
+ d1 = {'a': 100, 'b': 200, 'c':300} 
+d2 = {'a': 300, 'b': 200, 'd':400}
+ output= {'a': 400, 'b': 400, 'd': 400, 'c': 300}
+
+Solution:
+# Python program to combine two dictionary
+# adding values for common keys
+# initializing two dictionaries
+dict1 = {'a': 100, 'b': 200, 'c': 300}
+dict2 = {'a': 300, 'b': 200, 'c': 400}
+  
+# adding the values with common key
+for key in dict2:
+    if key in dict1:
+        dict2[key] = dict2[key] + dict1[key]
+    else:
+        pass          
+print(dict2)
+Output:  
+{'a': 400, 'b': 400, 'c': 700}
+
+
+7.Write a Python program to check the validity of password input by users. It should validate the password with given below conditions.
+ *At least 1 letter between [a-z] and 1 letter between [A-Z]. 
+*At least 1 number between [0-9]. 
+*At least 1 special character [!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~]. 
+*Minimum length 6 characters. 
+*Maximum length 16 characters.
+
+Solution: 
+import re
+p= input("Input your password")
+x = True
+while x:  
+    if (len(p)<6 or len(p)>12):
+        break
+    elif not re.search("[a-z]",p):
+        break
+    elif not re.search("[0-9]",p):
+        break
+    elif not re.search("[A-Z]",p):
+        break
+    elif not re.search("[$#@]",p):
+        break
+    elif re.search("\s",p):
+        break
+    else:
+        print("Valid Password")
+        x=False
+        break
+
+if x:
+    print("Not a Valid Password")
+
+Output: 
+Input your password Rama#9abc
+Valid Password
+
+
+
+6. Write a python program to convert a list of dictionaries which may contain duplicate dictonaries into a list containing unique dictionaries.
+Example - Input dict_list=[{'name': 'affirm', 'confidence': 0.9448149204254}, {'name': 'affirm', 'confidence': 0.944814920425415}, {'name': 'inform', 'confidence': 0.9842240810394287}, {'name': 'inform', 'confidence': 0.9842240810394287}] 
+output=[{'name': 'affirm', 'confidence': 0.9448149204254}, {'name': 'affirm', 'confidence': 0.944814920425415}, {'name': 'inform', 'confidence': 0.9842240810394287}]
+
+Solution:
+# Initialize list
+dict_list=[{'name': 'affirm', 'confidence': 0.9448149204254}, 
+           {'name': 'affirm', 'confidence': 0.944814920425415}, 
+           {'name': 'inform', 'confidence': 0.9842240810394287}, 
+           {'name': 'inform', 'confidence': 0.9842240810394287}]
+  
+# printing original list
+print("The original list is : " + str(dict_list))
+  
+# Unique dictionary filter in list
+# Using map() + set() + items() + sorted() + tuple()
+res = list(map(dict, set(tuple(sorted(sub.items())) for sub in dict_list)))
+  
+# printing result
+print("The list after removing duplicates : " + str(res))
+
+output: 
+The original list is : [{'name': 'affirm', 'confidence': 0.9448149204254}, {'name': 'affirm', 'confidence': 0.944814920425415}, {'name': 'inform', 'confidence': 0.9842240810394287}, {'name': 'inform', 'confidence': 0.9842240810394287}]
+The list after removing duplicates : [{'confidence': 0.9448149204254, 'name': 'affirm'}, {'confidence': 0.9842240810394287, 'name': 'inform'}, {'confidence': 0.944814920425415, 'name': 'affirm'}]
+
+
+5.  Write a Python program to automatically generate utterances. It will take a list of entities and a list of utterances as its input. its output will be a list of unique utterances with all the possible meaningful values of entities.
+Example- Input Entities_list=["kolkata", "delhi"] utterance_list=["How far is <> from <>", How is the weather in <>"] 
+output=["How far is kolkata from delhi","How far is delhi from kolkata,"How is the weather in kolkata,"How is the weather in delhi"] 
+Wrong_output=["How far is kolkata from kolkata","How far is delhi from delhi"]
+
+
+Chatbot:
+# chatbot
+		
+		
+
+		# coding: utf-8
+		
+
+		# # chat
+		
+
+		import nltk
+		
+
+		# nltk.download() # for downloading packages
+		
+
+		import numpy as np
+		import random
+		import string # to process standard python strings
+		
+
+		
+
+		f=open('Utterances.txt','r',errors = 'ignore')
+		raw=f.read()
+		raw=raw.lower()# converts to lowercase
+		#nltk.download('punkt') # first-time use only
+		#nltk.download('wordnet') # first-time use only
+		sent_tokens = nltk.sent_tokenize(raw)# converts to list of sentences 
+		word_tokens = nltk.word_tokenize(raw)# converts to list of words
+		
+
+		
+
+		sent_tokens[:2]
+		
+
+		
+
+		word_tokens[:5]
+		
+
+		
+
+		lemmer = nltk.stem.WordNetLemmatizer()
+		def LemTokens(tokens):
+		return [lemmer.lemmatize(token) for token in tokens]
+		remove_punct_dict = dict((ord(punct), None) for punct in string.punctuation)
+		def LemNormalize(text):
+		return LemTokens(nltk.word_tokenize(text.lower().translate(remove_punct_dict)))
+		
+
+		
+
+		GREETING_INPUTS = ("hello", "hi", "greetings", "sup", "what's up","hey",)
+		GREETING_RESPONSES = ["hi", "hey", "*nods*", "hi there", "hello", "I am glad! You are talking to me"]
+		
+
+		
+
+		
+
+		# Checking for greetings
+		def greeting(sentence):
+		"""If user's input is a greeting, return a greeting response"""
+		for word in sentence.split():
+		if word.lower() in GREETING_INPUTS:
+		return random.choice(GREETING_RESPONSES)
+		
+
+		
+
+		from sklearn.feature_extraction.text import TfidfVectorizer
+		from sklearn.metrics.pairwise import cosine_similarity
+		
+
+		
+
+		# Generating response
+		def response(user_response):
+		bot_response=''
+		TfidfVec = TfidfVectorizer(tokenizer=LemNormalize, stop_words='english')
+		tfidf = TfidfVec.fit_transform(sent_tokens)
+		vals = cosine_similarity(tfidf[-1], tfidf)
+		idx=vals.argsort()[0][-2]
+		flat = vals.flatten()
+		flat.sort()
+		req_tfidf = flat[-2]
+		if(req_tfidf==0):
+		bot_response=bot_response+"I am sorry! I don't understand you"
+		return bot_response
+		else:
+		bot_response = bot_response+sent_tokens[idx]
+		return bot_response
+		
+
+		
+
+		flag=True
+		print("bot: My name is bot. I will answer your queries about Chatbots. If you want to exit, type Bye!")
+		
+
+		while(flag==True):
+		user_response = input()
+		user_response=user_response.lower()
+		if(user_response!='bye'):
+		if(user_response=='thanks' or user_response=='thank you' ):
+		flag=False
+		print("bot: You are welcome..")
+		else:
+		if(greeting(user_response)!=None):
+		print("bot: "+greeting(user_response))
+		else:
+		sent_tokens.append(user_response)
+		word_tokens=word_tokens+nltk.word_tokenize(user_response)
+		final_words=list(set(word_tokens))
+		print("bot: ",end="")
+		print(response(user_response))
+		sent_tokens.remove(user_response)
+		else:
+		flag=False
+		print("bot: Bye! take care..") 
+
